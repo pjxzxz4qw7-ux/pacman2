@@ -12,8 +12,11 @@ body {
   background-color: black;
 }
 
+/* FIX 1: Changed position from `absolute` to `fixed` so overlays remain
+   anchored to the viewport, not the document flow. Without this, elements
+   like #sound (bottom: 20px) silently fail to position correctly. */
 .overlay {
-  position: absolute;
+  position: fixed;
   z-index: 999;
 }
 
@@ -28,7 +31,10 @@ body {
   bottom: 20px;
 }
 
-#logo-container {
+/* FIX 2: Renamed selector from `#logo-container` (ID) to `.logo-container`
+   (class) to match the HTML markup, which uses class="logo-container overlay".
+   The old rule was selecting nothing, so height: 100vh was never applied. */
+.logo-container {
   margin: 0;
   height: 100vh;
 }
@@ -71,7 +77,10 @@ body {
   background-color: white;
 }
 
-#gameover, #ready {
+/* FIX 3: Both #gameover and #ready share an ID selector block but had
+   conflicting `display: none` on #ready overriding the shared rule.
+   Split into separate rules for clarity and correctness. */
+#gameover {
   position: fixed;
   top: calc(50% - 30px);
   left: 50%;
@@ -85,8 +94,16 @@ body {
 }
 
 #ready {
+  position: fixed;
+  top: calc(50% - 30px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2em;
   color: yellow;
+  font-family: 'PressStart2P';
+  text-shadow: 2px 2px black;
   display: none;
+  white-space: nowrap;
 }
 
 .blink {
@@ -96,6 +113,6 @@ body {
 }
 
 @keyframes changeColor {
-  from {color: #2121DE;}
-  to {color: white;}
+  from { color: #2121DE; }
+  to   { color: white; }
 }
